@@ -20,16 +20,16 @@ DataFrames.isna(x::Real) = isnan(x)
 
 DataFrames.isna(x::AbstractArray{Real}) = isnan.(x)
 
-fillna(x) = fillna!(copy(x))
+fillna(x, o...) = fillna!(copy(x), o...)
 
-fillna!(df::DataFrame) = map(fillna!, df.columns)
+fillna!(df::DataFrame, o...) = map(fillna!, df.columns)
 
-function fillna!(x::AbstractArray)
+function fillna!(x::AbstractArray, o...)
     for i in eachindex(x)[2:end]
-        isna(x[i]) && (x[i] = x[i - 1])
+        isna(x[i], o...) && (x[i] = x[i - 1])
     end
     for i in eachindex(x)[end-1:-1:1]
-        isna(x[i]) && (x[i] = x[i + 1])
+        isna(x[i], o...) && (x[i] = x[i + 1])
     end
     x
 end
